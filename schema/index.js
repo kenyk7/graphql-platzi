@@ -1,41 +1,53 @@
 const { makeExecutableSchema } = require('graphql-tools')
 const resolvers = require('../resolvers')
-const Profesor = require('./Profesor')
-const Comentario = require('./Comentario')
-const Curso = require('./Curso')
+const User = require('./User')
+// const Tag = require('./Tag')
+const Post = require('./Post')
+const Comment = require('./Comment')
 
 const rootTypes = `
-  union ResultadoBusqueda = Profesor | Curso
-
   type Query {
-    cursos: [Curso]
-    profesores: [Profesor]
-    curso(id: Int): Curso
-    profesor(id: Int): Profesor
-    buscar(query: String): [ResultadoBusqueda]
+    users: [User]
+    user(id: Int): User
+    posts: [Post]
+    post(id: Int): Post
+    comments: [Comment]
+    comment(id: Int): Comment
   }
 
-  input NuevoProfesor {
-    nombre: String!
-    genero: Genero!
-    nacionalidad: String!
+  input userPayload {
+    username: String!
+    email: String!
+    password: String!
   }
 
-  input ProfesorEditable {
-    nombre: String
-    genero: Genero
-    nacionalidad: String
+  input postPayload {
+    title: String!
+    content: String!
+    authorId: Int!
+  }
+
+  input commentPayload {
+    text: String!
+    postId: Int!
+    authorId: Int!
   }
 
   type Mutation {
-    profesorAdd(profesor: NuevoProfesor): Profesor
-    profesorDelete(profesorId: Int): Profesor
-    profesorEdit(profesorId: Int, profesor: ProfesorEditable): Profesor
+    userAdd(user: userPayload): User
+    userDelete(id: Int): User
+    userEdit(id: Int, user: userPayload): User
+    postAdd(post: postPayload): Post
+    postDelete(id: Int): Post
+    postEdit(id: Int, post: postPayload): Post
+    commentAdd(comment: commentPayload): Comment
+    commentDelete(id: Int): Comment
+    commentEdit(id: Int, comment: commentPayload): Comment
   }
 `
 
 const schema = makeExecutableSchema({
-  typeDefs: [rootTypes, Profesor, Comentario, Curso],
+  typeDefs: [rootTypes, User, Post, Comment],
   resolvers
 })
 

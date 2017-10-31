@@ -25,3 +25,97 @@ Clona este repositorio y en la carpeta raíz ejecuta los siguientes comandos:
 1. `yarn start` para iniciar el servidor
 
 Siguiendo estos pasos, ahora en http://localhost:3000/graphiql deberías ver GraphiQL, y http://localhost:3000/graphql es el endpoint que usarás en tus clientes.
+
+## test
+
+```gql
+mutation addUser {
+  userAdd(user: {username:"kenyk7", email:"kenyk7@gmail.com", password:"secret123"}){
+    id
+    username
+    email
+    password
+  }
+}
+
+query users{
+  users{
+    id
+    username
+    email
+    password
+    posts{
+      id
+      title
+      comments{
+        id
+      }
+    }
+    comments{
+      id
+      text
+      post{
+        id
+      }
+    }
+  }
+}
+
+mutation addPost {
+  postAdd(post: {title:"Title the post 3", content:"Description the post 3", authorId: 2}){
+    id
+    title
+    content
+  }
+}
+
+mutation deletePost {
+  postDelete(id: 1){
+    id
+    title
+    content
+  }
+}
+
+query posts{
+  posts{
+    id
+    title
+    content
+    author{
+      id
+      username
+      email
+      comments{
+        id
+      }
+    }
+    comments{
+      id
+      text
+    }
+  }
+}
+
+mutation addComment {
+  commentAdd(comment: {text:"Comment 2 the post", postId: 3, authorId: 2}){
+    id
+    text
+  }
+}
+
+query comments{
+  comments{
+    id
+    text
+    author{
+      id
+      email
+    }
+    post{
+      id
+      title
+    }
+  }
+}
+```

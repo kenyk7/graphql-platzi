@@ -1,0 +1,8 @@
+module.exports = `
+  type Comment {
+    id: ID!
+    text: String!
+    author: User
+    post: Post
+  }
+`

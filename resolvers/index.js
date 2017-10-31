@@ -1,40 +1,56 @@
-const Curso = require('../models/Curso')
-const Profesor = require('../models/Profesor')
+const User = require('../models/User')
+const Tag = require('../models/Tag')
+const Post = require('../models/Post')
+const Comment = require('../models/Comment')
 
 module.exports = {
   Query: {
-    cursos: () => Curso.query().eager('[profesor, comentarios]'),
-    profesores: () => Profesor.query().eager('cursos'),
-    curso: (rootValue, { id }) => Curso.query().eager('[profesor, comentarios]').findById(id),
-    profesor: (rootValue, { id }) => Profesor.query().eager('cursos').findById(id),
-    buscar: (rootValue, params) => {
-      return [
-        Curso.query().findById(3),
-        Profesor.query().findById(1)
-      ]
-    }
+    // users
+    users: () => User.query().eager('[posts, comments]'),
+    user: (rootValue, { id }) => User.query().eager('[posts, comments]').findById(id),
+    // posts
+    posts: () => Post.query().eager('[author, comments]'),
+    post: (rootValue, { id }) => Post.query().eager('[author, comments]').findById(id),
+    // comments
+    comments: () => Comment.query().eager('[author, post]'),
+    comment: (rootValue, { id }) => Comment.query().eager('[author, post]').findById(id)
   },
   Mutation: {
-    profesorAdd: (_, { profesor }) => {
-      return Profesor
-        .query()
-        .insert(profesor)
+    // users
+    userAdd: (_, { user }) => {
+      return User.query().insert(user)
     },
-    profesorDelete: (_, { profesorId }) => {
-      return Profesor.query().findById(profesorId).then(profesor => {
-        return Profesor.query().deleteById(profesorId).then(() => profesor)
+    userDelete: (_, { id }) => {
+      return User.query().findById(id).then(user => {
+        return User.query().deleteById(id).then(() => user)
       })
     },
-    profesorEdit: (_, { profesorId, profesor }) => {
-      return Profesor
-        .query()
-        .patchAndFetchById(profesorId, profesor)
-    }
-  },
-  ResultadoBusqueda: {
-    __resolveType: (obj) => {
-      if (obj.nombre) return 'Profesor'
-      return 'Curso'
+    userEdit: (_, { id, user }) => {
+      return User.query().patchAndFetchById(id, user)
+    },
+    // posts
+    postAdd: (_, { post }) => {
+      return Post.query().insert(post)
+    },
+    postDelete: (_, { id }) => {
+      return Post.query().findById(id).then(post => {
+        return Post.query().deleteById(id).then(() => post)
+      })
+    },
+    postEdit: (_, { id, post }) => {
+      return Post.query().patchAndFetchById(id, post)
+    },
+    // comments
+    commentAdd: (_, { comment }) => {
+      return Comment.query().insert(comment)
+    },
+    commentDelete: (_, { id }) => {
+      return Comment.query().findById(id).then(comment => {
+        return Comment.query().deleteById(id).then(() => comment)
+      })
+    },
+    commentEdit: (_, { id, comment }) => {
+      return Comment.query().patchAndFetchById(id, comment)
     }
   }
 }
