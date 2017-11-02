@@ -6,14 +6,14 @@ const Comment = require('../models/Comment')
 module.exports = {
   Query: {
     // users
-    users: () => User.query().eager('[posts, comments]'),
-    user: (rootValue, { id }) => User.query().eager('[posts, comments]').findById(id),
+    users: () => User.query(),
+    user: (rootValue, { id }) => User.query().findById(id),
     // posts
-    posts: () => Post.query().eager('[author, comments]'),
-    post: (rootValue, { id }) => Post.query().eager('[author, comments]').findById(id),
+    posts: () => Post.query(),
+    post: (rootValue, { id }) => Post.query().findById(id),
     // comments
-    comments: () => Comment.query().eager('[author, post]'),
-    comment: (rootValue, { id }) => Comment.query().eager('[author, post]').findById(id)
+    comments: () => Comment.query(),
+    comment: (rootValue, { id }) => Comment.query().findById(id)
   },
   Mutation: {
     // users
@@ -51,6 +51,30 @@ module.exports = {
     },
     commentEdit: (_, { id, comment }) => {
       return Comment.query().patchAndFetchById(id, comment)
+    }
+  },
+  User: {
+    comments: async (user) => {
+      return Comment.query().where('authorId', user.id)
+    },
+    posts: async (user) => {
+      return Post.query().where('authorId', user.id)
+    }
+  },
+  Post: {
+    comments: async (post) => {
+      return Comment.query().where('postId', post.id)
+    },
+    author: async (post) => {
+      return User.query().findById(post.authorId)
+    }
+  },
+  Comment: {
+    post: async (comment) => {
+      return Post.query().findById(comment.postId)
+    },
+    author: async (comment) => {
+      return User.query().findById(comment.authorId)
     }
   }
 }
