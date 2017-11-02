@@ -10,8 +10,10 @@ const rootTypes = `
   type Query {
     cursos: [Curso]
     profesores: [Profesor]
+    comentarios: [Comentario]
     curso(id: Int): Curso
     profesor(id: Int): Profesor
+    comentario(id: Int): Comentario
     buscar(query: String): [ResultadoBusqueda]
   }
 

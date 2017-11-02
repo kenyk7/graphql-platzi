@@ -3,5 +3,6 @@ module.exports = `
     id: ID!
     nombre: String!
     cuerpo: String!
+    curso: Curso
   }
 `

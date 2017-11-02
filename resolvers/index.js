@@ -1,12 +1,15 @@
 const Curso = require('../models/Curso')
 const Profesor = require('../models/Profesor')
+const Comentario = require('../models/Comentario')
 
 module.exports = {
   Query: {
-    cursos: () => Curso.query().eager('[profesor, comentarios]'),
-    profesores: () => Profesor.query().eager('cursos'),
-    curso: (rootValue, { id }) => Curso.query().eager('[profesor, comentarios]').findById(id),
-    profesor: (rootValue, { id }) => Profesor.query().eager('cursos').findById(id),
+    cursos: () => Curso.query(),
+    profesores: () => Profesor.query(),
+    comentarios: () => Comentario.query(),
+    curso: (rootValue, { id }) => Curso.query().findById(id),
+    profesor: (rootValue, { id }) => Profesor.query().findById(id),
+    comentario: (rootValue, { id }) => Comentario.query().findById(id),
     buscar: (rootValue, params) => {
       return [
         Curso.query().findById(3),
@@ -35,6 +38,24 @@ module.exports = {
     __resolveType: (obj) => {
       if (obj.nombre) return 'Profesor'
       return 'Curso'
+    }
+  },
+  Curso: {
+    profesor: async (curso) => {
+      return Profesor.query().findById(curso.profesor_id)
+    },
+    comentarios: async (curso) => {
+      return Comentario.query().where('curso_id', curso.id)
+    }
+  },
+  Profesor: {
+    cursos: async (profesor) => {
+      return Curso.query().where('profesor_id', profesor.id)
+    }
+  },
+  Comentario: {
+    curso: async (comentario) => {
+      return Curso.query().findById(comentario.curso_id)
     }
   }
 }
