@@ -11,4 +11,9 @@ module.exports = `
     MASCULINO
     FEMENINO
   }
+
+  type AllProfesores{
+    all: [Profesor]
+    count: String!
+  }
 `

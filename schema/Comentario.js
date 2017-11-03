@@ -5,4 +5,9 @@ module.exports = `
     cuerpo: String!
     curso: Curso
   }
+  
+  type AllComentarios{
+  	all: [Comentario]
+    count: String!
+  }
 `

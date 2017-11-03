@@ -8,4 +8,9 @@ module.exports = `
     comentarios: [Comentario]
     rating: Int
   }
+
+  type AllCursos{
+  	all: [Curso]
+    count: String!
+  }
 `

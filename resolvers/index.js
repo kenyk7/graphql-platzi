@@ -2,6 +2,17 @@ const Curso = require('../models/Curso')
 const Profesor = require('../models/Profesor')
 const Comentario = require('../models/Comentario')
 
+function getAll (Model) {
+  return {
+    all: () => Model.query(),
+    count: () => {
+      return Model.query().count().then(function (data) {
+        return data[0][Object.keys(data[0])[0]]
+      })
+    }
+  }
+}
+
 module.exports = {
   Query: {
     cursos: () => Curso.query(),
@@ -15,6 +26,16 @@ module.exports = {
         Curso.query().findById(3),
         Profesor.query().findById(1)
       ]
+    },
+    viewer: () => {
+      return {
+        allCursos: getAll(Curso),
+        allProfesores: getAll(Profesor),
+        allComentarios: getAll(Comentario),
+        curso: ({id}) => Curso.query().findById(id),
+        profesor: ({id}) => Profesor.query().findById(id),
+        comentario: ({id}) => Comentario.query().findById(id),
+      }
     }
   },
   Mutation: {

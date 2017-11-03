@@ -3,6 +3,7 @@ const resolvers = require('../resolvers')
 const Profesor = require('./Profesor')
 const Comentario = require('./Comentario')
 const Curso = require('./Curso')
+const Viewer = require('./Viewer')
 
 const rootTypes = `
   union ResultadoBusqueda = Profesor | Curso
@@ -15,6 +16,7 @@ const rootTypes = `
     profesor(id: Int): Profesor
     comentario(id: Int): Comentario
     buscar(query: String): [ResultadoBusqueda]
+    viewer: Viewer
   }
 
   input NuevoProfesor {
@@ -37,7 +39,7 @@ const rootTypes = `
 `
 
 const schema = makeExecutableSchema({
-  typeDefs: [rootTypes, Profesor, Comentario, Curso],
+  typeDefs: [rootTypes, Viewer, Profesor, Comentario, Curso],
   resolvers
 })
 
